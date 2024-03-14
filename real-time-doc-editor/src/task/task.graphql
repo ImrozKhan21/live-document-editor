@@ -1,0 +1,19 @@
+extend type Query {
+    tasks: [Task!]!
+    task(id: ID!): Task
+}
+
+
+extend type Mutation {
+    createTask(title: String!, description: String, status: String, assigneeId: ID): Task!
+    updateTask(id: ID!, title: String, description: String, status: String, assigneeId: ID): Task
+    deleteTask(id: ID!): Task
+}
+
+type Task {
+    _id: ID!
+    title: String!
+    description: String
+    status: String
+    assignee: User
+}

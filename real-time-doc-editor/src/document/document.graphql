@@ -1,0 +1,20 @@
+extend type Query {
+    documents: [Document!]!
+    document(id: ID!): Document
+}
+
+extend type Mutation {
+    createDocument(title: String!, content: String!, ownerId: ID!): Document!
+    updateDocument(id: ID!, title: String, content: String): Document
+    deleteDocument(id: ID!): Document
+    shareDocument(id: ID!, ownerEmails: [String]!): Document
+}
+
+type Document {
+    _id: ID!
+    title: String!
+    content: String
+    owner: User
+    sharedWith: [String]
+    processing: Boolean
+}
