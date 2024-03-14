@@ -1,0 +1,17 @@
+<p-panel class="mb-2" header="Users with access" [toggleable]="true" [collapsed]="true">
+  <div class="flex justify-between items-center">
+    <div>
+      <p>Users with access</p>
+      @for (email of userEmailsWithDocsShared; track email) {
+        <span>{{ email }}; </span>
+      } @empty {
+        Empty list of users
+      }
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="email">Share with</label>
+      <input pInputText id="email" placeholder="User email" aria-describedby="email-help" [(ngModel)]="currentEmail"/>
+    </div>
+    <p-button (onClick)="addEmailToShareList()" label="Add"></p-button>
+  </div>
+</p-panel>

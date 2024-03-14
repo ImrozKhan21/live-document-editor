@@ -1,0 +1,6 @@
+<app-header></app-header>
+@if (loggedIn$ | async) {
+  <app-doc-selector></app-doc-selector>
+} @else {
+  <p>Not logged in</p>
+}
