@@ -1,4 +1,6 @@
-# Live Document editor, open it on multiple browsers to see live updates, it has full access control, you can share document with others by porviding their email
+# Live Document editor
+
+### open it on multiple browsers to see live updates, it has full access control, you can share document with others by porviding their email
 
 ## Getting Started
 
