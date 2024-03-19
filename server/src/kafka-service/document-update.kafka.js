@@ -16,6 +16,24 @@ const MAX_BATCH_SIZE = 3; // Update after 3 messages
 const UPDATE_INTERVAL = 5000; // Update every 5 seconds (optional)
 let timerId = null; // Store the timer ID for potential cancellation
 
+const sendEventToUpdateDocument = async ({updatedDoc, documentNameSpace}) => {
+    const {id, content} = updatedDoc;
+
+    roomSpacesForSocketIo[SERVICE_NAME] = documentNameSpace;
+    await producer.send({
+        topic: TOPIC_DOCUMENT_UPDATE,
+        messages: [
+            {
+                value: JSON.stringify({
+                    serviceName: SERVICE_NAME,
+                    documentId: id,
+                    content: content,
+                    action: "update-document-content",
+                }),
+            },
+        ],
+    });
+};
 
 const processBatch = async (data) => {
     const {documentId, serviceName} = data;
@@ -34,24 +52,6 @@ const processBatch = async (data) => {
 
     updateDocument(documentId, latestContent, historyUpdates, serviceName);
 
-};
-
-const sendEventToUpdateDocument = async ({updatedDoc, documentNameSpace}) => {
-    const {id, content} = updatedDoc;
-    roomSpacesForSocketIo[SERVICE_NAME] = documentNameSpace;
-    await producer.send({
-        topic: TOPIC_DOCUMENT_UPDATE,
-        messages: [
-            {
-                value: JSON.stringify({
-                    serviceName: SERVICE_NAME,
-                    documentId: id,
-                    content: content,
-                    action: "update-document-content",
-                }),
-            },
-        ],
-    });
 };
 
 const startDocumentUpdateConsumer = async () => {
@@ -76,7 +76,10 @@ const startDocumentUpdateConsumer = async () => {
                 timerId = null; // Reset the timer ID
                 await processBatch(data);
             } else if (UPDATE_INTERVAL && !timerId) { // Check for timer interval and running timer in case 3 messages never comes
-                timerId = setTimeout(processBatch, UPDATE_INTERVAL);
+                timerId = setTimeout(() => {
+                    timerId = null; // Reset the timer ID
+                    processBatch(data);
+                }, UPDATE_INTERVAL);
             }
             console.log(`Topic; ${topic} , Partition: ${partition} Received message`);
         }
