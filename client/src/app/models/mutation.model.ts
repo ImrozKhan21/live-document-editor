@@ -1,15 +1,10 @@
 import {gql} from "apollo-angular";
 
 export const UPDATE_DOCUMENT = gql`
-  mutation UpdateDocument($updateDocumentId: ID!, $title: String, $content: String) {
-  updateDocument(id: $updateDocumentId, title: $title, content: $content) {
+  mutation UpdateDocument($updateDocumentId: ID!, $title: String, $content: String, $email: String!) {
+  updateDocument(id: $updateDocumentId, title: $title, content: $content, email: $email) {
     _id
     content
-    owner {
-      _id
-      email
-      username
-    }
     title
   }
 }

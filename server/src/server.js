@@ -14,6 +14,7 @@ const {connectMongoose} = require("./services/mongo");
 const api = require("./api");
 const fs = require("fs");
 const passport = require("passport");
+const {GraphQLDateTime} = require("graphql-iso-date");
 require('dotenv').config();
 
 const config = {
@@ -43,10 +44,15 @@ const resolversArray = loadFilesSync('**/*', {
     extensions: ['resolver.js'],
 });
 
+const extendedResolvers = {
+    ...resolversArray,
+    DateTime: GraphQLDateTime, // Add the DateTime scalar resolver
+};
+
 async function startApolloServer(typeDefs, resolvers) {
     const schema = makeExecutableSchema({
         typeDefs: typesArray,
-        resolvers: resolversArray
+        resolvers:  resolversArray
     });
 
     const server = new ApolloServer({

@@ -12,7 +12,7 @@ export class MutationService {
   constructor(private apollo: Apollo, private docEditorService: DocEditorService) {
   }
 
-  async updateDoc(content: string) {
+  async updateDoc(content: string, email: string) {
     const currentDocument = this.docEditorService.selectedDocument;
     return await lastValueFrom(this.apollo.mutate(
       {
@@ -20,7 +20,8 @@ export class MutationService {
         variables: {
           updateDocumentId: currentDocument['_id'],
           title: currentDocument.title,
-          content: content
+          content: content,
+          email: email
         }
       }));
   }

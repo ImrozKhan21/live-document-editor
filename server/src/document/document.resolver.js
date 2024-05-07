@@ -1,4 +1,4 @@
-const {getDocuments, getDocument, createDocument, updateDocument, deleteDocument, shareDocument} = require("./document.model");
+const {getDocuments, getDocument, createDocument, updateDocument, deleteDocument, shareDocument, getUpdatedBy} = require("./document.model");
 const documentResolvers = {
     Query: {
         documents: async (_,__, context) => {
@@ -24,6 +24,17 @@ const documentResolvers = {
             return await shareDocument({id, ownerEmails}, documentNameSpace)
         },
     },
+    Document: {
+        history: (document) => {
+            return document.history || {};
+        },
+    },
+    DocumentHistory: { // because we want to support nullable updatedBy object,
+        // otherwise it throws error for mandatory fields in User
+        updatedBy: async (historyEntry, args, context) => {
+           return await getUpdatedBy(historyEntry, args, context);
+        }
+    }
 };
 
 module.exports = documentResolvers;

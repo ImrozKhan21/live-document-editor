@@ -11,7 +11,7 @@ const getDocuments = async (user) => {
             { owner: userId },
             { sharedWith: user.email }
         ]
-    }, {'__v': 0}, {lean: true}).populate('owner');
+    }, {'__v': 0}, {lean: false}).populate('owner').populate('history.updatedBy')
 }
 const getDocument = async (id, user) => {
     const currentDocument = DocumentModel.findById(id, {'__v': 0}, {lean: true}).populate('owner');
@@ -30,7 +30,11 @@ const createDocument = async ({title, content, ownerId}) => {
 }
 
 const updateDocument = async (updatedDoc, documentNameSpace) => {
-    await sendEventToUpdateDocument({updatedDoc, documentNameSpace});
+    const updatedByEmail = updatedDoc.email;
+    const user = await User.findOne({ email: updatedByEmail }).exec();
+    const userId = user?._id;
+    const documentUpdates = {...updatedDoc, userId: userId};
+    await sendEventToUpdateDocument({updatedDoc: documentUpdates, documentNameSpace});
     return {...updatedDoc, _id: updatedDoc.id, processing: true};
 }
 
@@ -53,6 +57,13 @@ const shareDocument = async ({id, ownerEmails}, documentNameSpace) => {
     return {_id: id, processing: true};
 }
 
+const getUpdatedBy = async (historyEntry, args, context) => {
+    if (!historyEntry.updatedBy) {
+        return null;  // Return null if no user ID is set
+    }
+    return User.findById(historyEntry.updatedBy);
+}
+
 module.exports = {
-    getDocument, getDocuments, createDocument, updateDocument, deleteDocument, shareDocument
+    getDocument, getDocuments, createDocument, updateDocument, deleteDocument, shareDocument, getUpdatedBy
 }

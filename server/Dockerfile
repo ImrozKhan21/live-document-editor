@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json
 COPY package*.json .
 # Install dependencies
-RUN npm install
+RUN npm install --force
 # Copy the rest of your app's source code
 COPY . .
 # Make port available outside the container

@@ -12,6 +12,7 @@ import {DocSelectorComponent} from './components/doc-selector/doc-selector.compo
 import {HeaderComponent} from "./components/header/header.component";
 import {ShareDocComponent} from "./components/share-doc/share-doc.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {DocHistoryComponent} from "./components/doc-history/doc-history.component";
 
 @NgModule({
   declarations: [
@@ -19,18 +20,19 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     DocEditorComponent,
     DocSelectorComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    EditorModule,
-    FormsModule,
-    GraphQLModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    HeaderComponent,
-    ShareDocComponent
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        EditorModule,
+        FormsModule,
+        GraphQLModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        HeaderComponent,
+        ShareDocComponent,
+        DocHistoryComponent
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

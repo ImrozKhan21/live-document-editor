@@ -1,0 +1,21 @@
+<p-panel class="mb-2" header="Document History" [toggleable]="true" [collapsed]="true">
+  <div>
+    @for (history of docHistory; track history) {
+      <div class="flex gap-4 items-center justify-between w-full">
+        <div class="flex gap-2">
+          <span>-</span>
+          <div [innerHTML]="history.content.substring(0, 100)"></div>
+          <span>Updated by: {{ history.updatedBy?.email }} at {{ history.updatedAt | date }}; </span>
+        </div>
+
+        <div class="flex gap-2">
+          <p-button label="Revert to this version" (onClick)="revertToVersion(history)"></p-button>
+          <p-button label="View" (onClick)="revertToVersion(history)"></p-button>
+        </div>
+
+      </div>
+    } @empty {
+      No history
+    }
+  </div>
+</p-panel>

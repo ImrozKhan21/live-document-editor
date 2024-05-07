@@ -16,6 +16,10 @@ documentSchema.add({
     history: [{
         content: {type: String, required: false},
         updatedAt: { type: Date, default: Date.now },
+        updatedBy: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        },
         _id: false
     }]
 });

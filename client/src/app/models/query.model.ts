@@ -12,6 +12,13 @@ export const GET_DOCUMENTS = gql`
       }
       title
       sharedWith
+      history {
+        content
+        updatedAt
+        updatedBy {
+          email
+        }
+      }
     }
   }
 `;

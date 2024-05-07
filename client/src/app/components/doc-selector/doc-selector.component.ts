@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {QueryService} from "../../services/query.service";
 import {DocEditorService} from "../../services/doc-editor.service";
 import {AppStateService} from "../../services/app-state.service";
+import {take} from "rxjs";
 
 @Component({
   selector: 'app-doc-selector',
@@ -18,7 +19,7 @@ export class DocSelectorComponent implements OnInit {
 
   async ngOnInit() {
     const loggedInUser = this.appStateService.loggedInUser;
-    this.queryService.getDocuments().subscribe((data) => {
+    this.queryService.getDocuments().pipe(take(1)).subscribe((data) => {
       this.documents = data;
       this.selectedDocument = this.documents[0];
       if (this.selectedDocument.sharedWith.includes(loggedInUser.email) || this.selectedDocument.owner.email === loggedInUser.email) {

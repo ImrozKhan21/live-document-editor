@@ -17,8 +17,8 @@ const UPDATE_INTERVAL = 5000; // Update every 5 seconds (optional)
 let timerId = null; // Store the timer ID for potential cancellation
 
 const sendEventToUpdateDocument = async ({updatedDoc, documentNameSpace}) => {
-    const {id, content} = updatedDoc;
-
+    console.log(`Data in sendEventToUpdateDocument`, updatedDoc)
+    const {id, content, userId} = updatedDoc;
     roomSpacesForSocketIo[SERVICE_NAME] = documentNameSpace;
     await producer.send({
         topic: TOPIC_DOCUMENT_UPDATE,
@@ -28,6 +28,7 @@ const sendEventToUpdateDocument = async ({updatedDoc, documentNameSpace}) => {
                     serviceName: SERVICE_NAME,
                     documentId: id,
                     content: content,
+                    userId: userId,
                     action: "update-document-content",
                 }),
             },
@@ -47,7 +48,8 @@ const processBatch = async (data) => {
 
     const latestContent = sortedBatch[0].content; // Assuming 'content' holds the latest update
     const historyUpdates = sortedBatch.slice(0, Math.min(sortedBatch.length, MAX_BATCH_SIZE)).map(message => {
-        return {content: message.content}
+        return {content: message.content, updatedBy: new mongoose.Types.ObjectId(message.userId) // converting string to ObjectId
+        }
     });
 
     updateDocument(documentId, latestContent, historyUpdates, serviceName);

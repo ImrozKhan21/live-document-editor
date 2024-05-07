@@ -1,6 +1,6 @@
 import {Injectable, signal} from '@angular/core';
 import  { io }  from 'socket.io-client';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -8,10 +8,11 @@ import {BehaviorSubject} from "rxjs";
 export class DocEditorService {
   private socket = io('http://localhost:8080/document');
   selectedDocument!: any;
-  selectedContent$ = new BehaviorSubject('');
+  selectedContent$ = new Subject();
 
   constructor() {
     this.socket.off('documentUpdated').on('documentUpdated', (data) => {
+      console.log('DATA, documentUpdated', data)
       this.setSelectedDocContent(data.content);
       // Update your document content based on the received data
       // For example, if you're using React, you might update the state here

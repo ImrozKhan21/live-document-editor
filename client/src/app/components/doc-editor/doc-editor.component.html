@@ -1,13 +1,14 @@
 <form *ngIf="docForm" [formGroup]="docForm">
   <app-share-doc></app-share-doc>
 
+  <app-doc-history [document]="selectedDocument"></app-doc-history>
+
   <editor
+    #docInput
     formControlName="docControl"
     [apiKey]="apiKey"
     [init]="{ plugins: 'lists link image table code help wordcount',
     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
    }"
-    [initialValue]="currentContent"
-
   ></editor>
 </form>

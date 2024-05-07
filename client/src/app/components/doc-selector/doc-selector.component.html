@@ -1,6 +1,6 @@
 <div>
   @if (haveAccess) {
-    <app-doc-editor *ngIf="selectedDocument"></app-doc-editor>
+    <app-doc-editor *ngIf="selectedDocument" [selectedDocument]="selectedDocument"></app-doc-editor>
   } @else {
    <p>You don't have access to view the document</p>
   }

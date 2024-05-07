@@ -4,6 +4,8 @@ services:
     image: zookeeper
     ports:
       - "2181:2181"
+    networks:
+      - app-network
 
   kafka:
     image: confluentinc/cp-kafka
@@ -15,6 +17,8 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - app-network
 
   server:
     build: ./
@@ -29,3 +33,9 @@ services:
       - kafka
       - zookeeper
     command: npm start
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

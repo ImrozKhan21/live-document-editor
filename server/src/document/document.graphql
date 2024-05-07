@@ -5,9 +5,17 @@ extend type Query {
 
 extend type Mutation {
     createDocument(title: String!, content: String!, ownerId: ID!): Document!
-    updateDocument(id: ID!, title: String, content: String): Document
+    updateDocument(id: ID!, title: String, content: String, email: String!): Document
     deleteDocument(id: ID!): Document
     shareDocument(id: ID!, ownerEmails: [String]!): Document
+}
+
+scalar DateTime
+
+type DocumentHistory {
+    content: String
+    updatedAt: DateTime
+    updatedBy: User
 }
 
 type Document {
@@ -17,4 +25,5 @@ type Document {
     owner: User
     sharedWith: [String]
     processing: Boolean
+    history: [DocumentHistory]
 }
